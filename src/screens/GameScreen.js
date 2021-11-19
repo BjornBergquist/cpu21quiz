@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react'
 import { StyleSheet, Text } from 'react-native'
 import BackgroundGradientView from '../components/BackgroundGradientView'
 import {generateQuestions} from '../shared/api/service/quizApiService'
-import axios from 'axios'
 import globalStyles from '../shared/global/globalStyle'
 
 const GameScreen = () => {
