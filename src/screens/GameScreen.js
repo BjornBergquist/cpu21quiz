@@ -3,6 +3,7 @@ import { StyleSheet, Text } from 'react-native'
 import BackgroundGradientView from '../components/BackgroundGradientView'
 import {generateQuestions} from '../shared/api/service/quizApiService'
 import globalStyles from '../shared/global/globalStyle'
+import QuestionCard from '../components/QuestionCard'
 
 const GameScreen = () => {
     const [serverData, quizApiService] = useState()
@@ -18,7 +19,7 @@ const GameScreen = () => {
 
     const displayData = () => {
         return serverData
-            ? <Text style={globalStyles.text}>{serverData.results[0].question}</Text>
+            ? <QuestionCard question={serverData.results[0]}/>
             : <Text style={globalStyles.text}>Loading questions...</Text>
     } 
 
