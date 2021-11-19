@@ -2,19 +2,34 @@ import React, {useState, useEffect} from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Button } from 'react-native-elements'
 import globalStyles from '../shared/global/globalStyle'
-import { shuffleArray } from '../shared/global/helperFunctions'
+import { shuffleArray, formatString } from '../shared/global/helperFunctions'
 
-const QuestionCard = ({question}) => {
+
+const QuestionCard = ({question, callback}) => {
     const [shuffledOptions, setShuffledOptions] = useState()
 
     const displayOptions = () => {
         return shuffledOptions
-            ?  shuffledOptions.map((titleText)=><Button key={titleText} title={titleText} onPress={() => handleSelectOption(titleText)}/>)
-            :   <Text style={globalStyles.text}>Shuffeling...</Text>
+            ?  shuffledOptions.map((titleText)=><Button 
+                key={titleText} 
+                type="outline"
+                buttonStyle={globalStyles.buttonStyle} 
+                titleStyle={{color:"white"}}
+                title={formatString(titleText)} 
+                onPress={() => handleSelectOption(titleText)}
+            />)
+            :   <Text style={globalStyles.text}>Loading options...</Text>
     }
 
     const handleSelectOption = (optionText) =>{
-        console.log(optionText===question.correct_answer?"Correct!":"Incorrect");
+        if (optionText===question.correct_answer){
+            console.log("Correct!");
+            callback({type: "correct_answer"})
+        } else {
+            console.log("Incorrect!");
+            callback({type: "incorrect_answer"})
+        }
+        setShuffledOptions()
     }
 
     useEffect(() => {
@@ -25,13 +40,13 @@ const QuestionCard = ({question}) => {
             options = shuffleArray(options)
             setShuffledOptions(options)
         }
-    }, [])
+    }, [shuffledOptions])
 
     return (
         <View>
             <Text style={globalStyles.text}>{question.category}</Text>
             <Text style={globalStyles.text}>{question.difficulty}</Text>
-            <Text style={globalStyles.text}>{question.question}</Text>
+            <Text style={globalStyles.text}>{formatString(question.question)}</Text>
             {displayOptions()}
         </View>
     )
